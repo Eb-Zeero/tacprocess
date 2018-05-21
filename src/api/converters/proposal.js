@@ -78,7 +78,13 @@ function requestedTime(timeRequirements, semester) {
 
 export function convertProposals(proposals, semester, partner){
 	if (!proposals.proposals){ return []}
-	return ( proposals.proposals || [] ).map( proposal => ({
+	
+	return ( proposals.proposals || [] ).map( proposal => {
+		const liaisonAstronomer = proposal.liaisonSaltAstronomer ? proposal.liaisonSaltAstronomer.username : null
+		const technicalReviews = techReviews(proposal.techReviews)
+		const timeAllocated = allocatedTime(proposal.allocatedTime, partner)
+		const tacComment = tacComments(proposal.tacComment)
+		return ({
 			proposalCode: proposal.code,
 			title: proposal.title,
 			abstract: proposal.abstract,
@@ -91,13 +97,20 @@ export function convertProposals(proposals, semester, partner){
 			isLong: isLongTermProposal(proposal, semester),
 			isThesis: proposal.isThesis,
 			totalRequestedTime: totalRequested(proposal.timeRequirements, semester),
-			minTime: minimumRequestedTime(proposal.timeRequests, semester),
+			minTime: minimumRequestedTime(proposal.timeRequirements, semester),
 			instruments: proposal.instruments,
 			principalInvestigator: `${ proposal.principalInvestigator.lastName } ${ proposal.principalInvestigator.firstName }`,
-			liaisonAstronomer: proposal.liaisonSaltAstronomer ? proposal.liaisonSaltAstronomer.username : null,
-			techReviews: techReviews(proposal.techReviews),
-			allocatedTime: allocatedTime(proposal.allocatedTime, partner),
-			tacComment: tacComments(proposal.tacComment),
-			requestedTime: requestedTime(proposal.timeRequests, semester)
-		}))
+			liaisonAstronomer,
+			technicalReviews,
+			timeAllocated,
+			tacComment,
+			requestedTime: requestedTime(proposal.timeRequirements, semester),
+			initialState: {
+				liaisonAstronomer,
+				technicalReviews,
+				timeAllocated,
+				tacComment
+			}
+		})
+	})
 }
