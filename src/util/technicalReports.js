@@ -16,7 +16,7 @@ import * as _ from 'lodash'
  * @returns {*}
  */
 export function getTechnicalReport(proposal, semester, format='string') {
-  const review = proposal.techReviews[ semester ]
+  const review = proposal.technicalReviews[ semester ]
   const feasible = review && review.feasible ? review.feasible : null
   const comment = review && review.comment ? review.comment : null
   const details = review && review.details ? review.details : null
@@ -59,10 +59,10 @@ function getDefaultReview(p, semester) {
   let details = null
   let comment = null
 
-  if (Object.keys(p.techReviews).some(s => s < semester)) {
-    Object.keys(p.techReviews).forEach(s => {
+  if (Object.keys(p.technicalReviews).some(s => s < semester)) {
+    Object.keys(p.technicalReviews).forEach(s => {
 
-      if (s < semester && (!_.isNull(p.techReviews[ s ].comment) || p.techReviews[ s ].comment !== 'none')) {
+      if (s < semester && (!_.isNull(p.technicalReviews[ s ].comment) || p.technicalReviews[ s ].comment !== 'none')) {
         name = p.liaisonAstronomer
         feasible = 'yes'
         details = 'no'
@@ -81,16 +81,16 @@ function getDefaultReview(p, semester) {
 }
 
 export function setDefaultTechReviews(proposals, semester) {
-  return (proposals || []).map(p => {
-    if (p.techReviews[ semester ]) {
-      return p
+  return (proposals || []).map(proposal => {
+    if (proposal.technicalReviews[ semester ]) {
+      return proposal
     }
         
-    const rev = getDefaultReview(p, semester)
+    const rev = getDefaultReview(proposal, semester)
     return {
-      ...p,
-      techReviews: {
-        ...p.techReviews,
+      ...proposal,
+      technicalReviews: {
+        ...proposal.technicalReviews,
         [ semester ]: {
           reviewer: rev.reviewer,
           feasible: rev.feasible,
