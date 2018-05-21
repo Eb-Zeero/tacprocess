@@ -1,7 +1,7 @@
-import React from 'react';
-import propTypes from "prop-types";
-import {getSaltAstronomerName, getSaltAstronomerUsername, hasLiaison} from '../../util/salt-astronomer'
-import {isLiaisonAstronomerUpdated} from '../../util/proposal-filtering'
+import React from 'react'
+import propTypes from 'prop-types'
+import { getSaltAstronomerName, getSaltAstronomerUsername, hasLiaison } from '../../util/salt-astronomer'
+import { isLiaisonAstronomerUpdated } from '../../util/proposal-filtering'
 
 const getEventValue = (event, astronomers) => {
   event.preventDefault()
@@ -13,22 +13,22 @@ const getEventValue = (event, astronomers) => {
   return null
 }
 
-const LiaisonSelector = ({proposal, astronomers, setLiaison, initProposals, username, canAssign}) => {
-  const col = isLiaisonAstronomerUpdated(proposal, initProposals) ? {color: 'blue'} : {color: 'black'}
+const LiaisonSelector = ({ proposal, astronomers, setLiaison, initProposals, username, canAssign }) => {
+  const col = isLiaisonAstronomerUpdated(proposal, initProposals) ? { color: 'blue' } : { color: 'black' }
   const liaison = getSaltAstronomerName(proposal.liaisonAstronomer, astronomers)
   return (
     <td>
       {
         canAssign ?
-          <select className={'setLiaison'} style={col} defaultValue={liaison} onChange={
+          <select className='setLiaison' style={ col } defaultValue={ liaison } onChange={
             e => setLiaison(getEventValue(e, astronomers), proposal.proposalCode)
-          } name={'selector'}>
+          } name='selector'>
             {
-              !hasLiaison(proposal.proposalCode, initProposals) && <option value={'none'}>none</option>
+              !hasLiaison(proposal.proposalCode, initProposals) && <option value='none'>none</option>
             }
             {
               astronomers.map(op => (
-                <option key={op.username} value={op.name} name={op.username}>
+                <option key={ op.username } value={ op.name } name={ op.username }>
                   {op.name}
                 </option>
               ))
@@ -36,18 +36,18 @@ const LiaisonSelector = ({proposal, astronomers, setLiaison, initProposals, user
           </select> :
           <div>
             <input
-              className={'setLiaison'}
-              checked={proposal.liaisonAstronomer}
-              disabled={ hasLiaison(proposal.proposalCode, initProposals)}
-              type={'checkbox'}
-              value={ username}
-              onChange={e => setLiaison(getEventValue(e, astronomers), proposal.proposalCode)}/>
+              className='setLiaison'
+              checked={ proposal.liaisonAstronomer }
+              disabled={ hasLiaison(proposal.proposalCode, initProposals) }
+              type='checkbox'
+              value={ username }
+              onChange={ e => setLiaison(getEventValue(e, astronomers), proposal.proposalCode) }/>
             { proposal.liaisonAstronomer ?
-              <a style={col}> {liaison} </a>: <a style={{color: 'red'}}>{'Select'}</a>}
+              <a style={ col }> {liaison} </a>: <a style={ { color: 'red' } }>Select</a>}
           </div>
       }
     </td>
-)}
+  )}
 
 LiaisonSelector.propTypes = {
   proposal: propTypes.object.isRequired,
@@ -56,5 +56,5 @@ LiaisonSelector.propTypes = {
   initProposals: propTypes.array.isRequired,
   username: propTypes.string.isRequired,
   canAssign: propTypes.bool.isRequired
-};
+}
 export default LiaisonSelector

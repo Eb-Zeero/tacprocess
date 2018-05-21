@@ -219,3 +219,7 @@ input[disabled]+label {
     font-size: 20px;
     margin-top: 40px;
 }
+
+.strike {
+    text-decoration: line-through
+}
