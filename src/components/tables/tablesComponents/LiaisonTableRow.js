@@ -18,7 +18,7 @@ const LiaisonTableRow = ({ proposal, initProposals, requestSummary, semester, se
       </a>
     </td>
     <td className=' table-height width-400'>{proposal.title}</td>
-    <td className='width-100'>{proposal.pi}</td>
+    <td className='width-100'>{proposal.principalInvestigator}</td>
     <LiaisonSelector
       proposal={ proposal }
       astronomers={ astronomers }
