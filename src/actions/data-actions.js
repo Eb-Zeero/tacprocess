@@ -53,7 +53,7 @@ export function fetchAllData(semester, partner){
           dispatch(fetchSAPass(data[ 0 ]))
           dispatch(userLoggedIn(convertUserData(data[ 1 ].data.data.user)))
           dispatch(partnersFilter(ALL_PARTNER))
-          dispatch(fetchProposalsPass(data[ 2 ]))
+          dispatch(fetchProposalsPass(data[ 2 ], semester))
           dispatch(fetchTargetsPass(data[ 3 ]))
           dispatch(fetchAllocationsPass(data[ 4 ]))
           dispatch(fetchTacMembersPass(data[ 5 ]))

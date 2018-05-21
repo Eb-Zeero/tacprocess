@@ -13,8 +13,8 @@ const getEventValue = (event, astronomers) => {
   return null
 }
 
-const LiaisonSelector = ({ proposal, astronomers, setLiaison, initProposals, username, canAssign }) => {
-  const col = isLiaisonAstronomerUpdated(proposal, initProposals) ? { color: 'blue' } : { color: 'black' }
+const LiaisonSelector = ({ proposal, astronomers, setLiaison, username, canAssign }) => {
+  const col = isLiaisonAstronomerUpdated(proposal) ? { color: 'blue' } : { color: 'black' }
   const liaison = getSaltAstronomerName(proposal.liaisonAstronomer, astronomers)
   return (
     <td>
@@ -24,12 +24,12 @@ const LiaisonSelector = ({ proposal, astronomers, setLiaison, initProposals, use
             e => setLiaison(getEventValue(e, astronomers), proposal.proposalCode)
           } name='selector'>
             {
-              !hasLiaison(proposal.proposalCode, initProposals) && <option value='none'>none</option>
+              !hasLiaison(proposal) && <option value='none'>none</option>
             }
             {
               astronomers.map(op => (
-                <option key={ op.username } value={ op.name } name={ op.username }>
-                  {op.name}
+                <option key={ op.username } value={ op.firstName } name={ op.username }>
+                  {op.firstName}
                 </option>
               ))
             }
@@ -38,7 +38,7 @@ const LiaisonSelector = ({ proposal, astronomers, setLiaison, initProposals, use
             <input
               className='setLiaison'
               checked={ proposal.liaisonAstronomer }
-              disabled={ hasLiaison(proposal.proposalCode, initProposals) }
+              disabled={ hasLiaison(proposal) }
               type='checkbox'
               value={ username }
               onChange={ e => setLiaison(getEventValue(e, astronomers), proposal.proposalCode) }/>
@@ -53,7 +53,6 @@ LiaisonSelector.propTypes = {
   proposal: propTypes.object.isRequired,
   astronomers: propTypes.array.isRequired,
   setLiaison: propTypes.func.isRequired,
-  initProposals: propTypes.array.isRequired,
   username: propTypes.string.isRequired,
   canAssign: propTypes.bool.isRequired
 }

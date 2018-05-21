@@ -13,7 +13,7 @@ const LiaisonTable = ({ proposals, canAssign, astronomers, requestSummary, usern
           <th>Proposal Code</th>
           <th>Summary</th>
           <th>Proposal Title</th>
-          <th>Proposal Investigator</th>
+          <th>Principal Investigator</th>
           <th>Liaison Astronomer</th>
         </tr>
       </thead>
