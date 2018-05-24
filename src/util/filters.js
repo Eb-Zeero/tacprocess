@@ -108,7 +108,7 @@ export const listForDropdown = list => ( list || [] ).filter( l => l !== 'OTH').
  * @params Array of SALT astronomers directly from server
  * @return Array of SALT astronomers names
  * */
-export const getAstronomersList = saList => (saList || []).map( l => (`${ l.name }`))
+export const getAstronomersList = saList => (saList || []).map( l => (`${ l.firstName }`))
 
 /**
  * get a current uri path and return the selected page name
@@ -150,16 +150,19 @@ export const reduceProposalsPerAstronomer = (proposals, astronomer, semester) =>
   }
   else if (astronomer === 'Assigned'){
     proposals.forEach(p => {
-      if (p.techReviews[ semester ].reviewer.username !== null) {prop.push(p)}
+      if (p.technicalReviews[ semester ].reviewer !== null) {prop.push(p)}
     })
   }
   else if (astronomer === 'Not Assigned'){
     proposals.forEach(p => {
-      if (p.techReviews[ semester ].reviewer.username === null) {prop.push(p)}
+      if (p.technicalReviews[ semester ].reviewer === null) {prop.push(p)}
     })
   }else {
     proposals.forEach(p => {
-      if (p.techReviews && p.techReviews[ semester ] && p.techReviews[ semester ].reviewer && p.techReviews[ semester ].reviewer.username === astronomer) {prop.push(p)}
+      if (p.technicalReviews && p.technicalReviews[ semester ] && p.technicalReviews[ semester ].reviewer && p.technicalReviews[ semester ].reviewer.username === astronomer) {
+				console.log('PPPP', p.technicalReviews[ semester ].reviewer)
+        prop.push(p)
+      }
     })
   }
 
@@ -168,12 +171,12 @@ export const reduceProposalsPerAstronomer = (proposals, astronomer, semester) =>
 
 export const isTechReportUpdated = (proposal, initProposals, semester) => {
   const initProposal = initProposals.find(p => p.proposalCode === proposal.proposalCode)
-  return !initProposal || makeTechComment(proposal.techReviews[ semester ]) !== makeTechComment(initProposal.techReviews[ semester ])
+  return !initProposal || makeTechComment(proposal.technicalReviews[ semester ]) !== makeTechComment(initProposal.technicalReviews[ semester ])
 }
 
 export const isReviewerUpdated = (proposal, initProposals, semester) => {
   const initProposal = initProposals.find(p => p.proposalCode === proposal.proposalCode)
-  return !initProposal || initProposal.techReviews[ semester ].reviewer.username !== proposal.techReviews[ semester ].reviewer.username
+  return !initProposal || initProposal.technicalReviews[ semester ].reviewer !== proposal.technicalReviews[ semester ].reviewer.username
 }
 
 export const compareByValue = (a, b) => {

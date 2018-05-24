@@ -18,15 +18,27 @@ export function tacComments (comment) {
 	return tacComment
 }
 
-function techReviews(technicalReview) {
-	
-	return ( technicalReview || [] ).reduce((prev, tr) => ({
+function techReviews(technicalReview, semester) {
+	let techRev = ( technicalReview || [] ).reduce((prev, tr) => ({
 		...prev,
 		[ tr.semester ]: {
-			reviewer: tr.reviewer,
+			reviewer: tr.reviewer.username,
 			...getTechReportFields(tr.report)
 		}
 	}), {})
+	if(!(semester in techReviews)) {
+		techRev = {
+			...techRev,
+			[ semester ]: {
+				reviewer: null,
+				comment: null,
+				feasible: null,
+				details: null
+			}
+		}
+	}
+	
+	return techRev
 }
 
 function allocatedTime(timeAllocations){
@@ -81,7 +93,7 @@ export function convertProposals(proposals, semester, partner){
 	
 	return ( proposals.proposals || [] ).map( proposal => {
 		const liaisonAstronomer = proposal.liaisonSaltAstronomer ? proposal.liaisonSaltAstronomer.username : null
-		const technicalReviews = techReviews(proposal.techReviews)
+		const technicalReviews = techReviews(proposal.techReviews, semester)
 		const timeAllocated = allocatedTime(proposal.allocatedTime, partner)
 		const tacComment = tacComments(proposal.tacComment)
 		return ({

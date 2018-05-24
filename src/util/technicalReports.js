@@ -20,16 +20,27 @@ export function getTechnicalReport(proposal, semester, format='string') {
   const feasible = review && review.feasible ? review.feasible : null
   const comment = review && review.comment ? review.comment : null
   const details = review && review.details ? review.details : null
-  const report = review && review.report ? review.report : null
+  let reviewer = null
+  if (review && review.reviewer) { // eslint-disable-next-line
+    reviewer = review.reviewer
+  } else {
+    reviewer = proposal.liaisonAstronomer ? proposal.liaisonAstronomer : null
+  }
 
   const lcFormat = format.toLowerCase()
+  console.log(proposal, {
+		feasible,
+		comment,
+		details,
+		reviewer
+	})
 
   if (lcFormat === 'object') {
     return {
       feasible,
       comment,
       details,
-      report
+      reviewer
     }
   }
 

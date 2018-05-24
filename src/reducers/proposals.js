@@ -4,6 +4,7 @@ import {
   FETCH_PROPOSALS_FAIL,
   UPDATE_SINGLE_PROPOSAL,
   UPDATING_PROPOSALS,
+  UPDATE_TECHNICAL_REVIEWER,
   UPDATE_TECHNICAL_REVIEW,
   SUBMIT_TECHNICAL_REVIEWS_START,
   SUBMIT_TECHNICAL_REVIEWS_PASS,
@@ -92,27 +93,51 @@ export default function proposals(state = initialState, action = {}) {
       proposals: action.payload,
     }
   }
+	case UPDATE_TECHNICAL_REVIEWER: {
+	  const { semester, proposalCode, reviewer } = action.payload
+    console.log(reviewer)
+		
+		return {
+	    ...state,
+      submittedTechnicalReports: false,
+      proposals: state.proposals.map(p => {
+        if (p.proposalCode === proposalCode) {
+          return {
+            ...p,
+            technicalReviews: {
+              ...p.technicalReviews,
+              [ semester ]: {
+                ...p.technicalReviews[ semester ],
+                reviewer
+              }
+            }
+          }
+					}
+				return p
+      })
+    }
+	}
   case UPDATE_TECHNICAL_REVIEW: {
-    const updatedProposals = state.updatedProposals.indexOf(action.payload.proposalCode) === -1 ?
-      [...state.updatedProposals, action.payload.proposalCode] : state.updatedProposals
+    const { semester, proposalCode, field, newValue } = action.payload
 
     return {
       ...state,
       submittedTechnicalReports: false,
       proposals: state.proposals.map(p => {
-        if (p.proposalCode === action.payload.proposalCode) {
+        if (p.proposalCode === proposalCode) {
           return {
             ...p,
-            techReviews: {
-              ...p.techReviews,
-              [ action.payload.semester ]: action.payload.techReview
+            technicalReviews: {
+              ...p.technicalReviews,
+              [ semester ]: {
+								...p.technicalReviews[ semester ],
+                [ field ]: newValue
+              }
             }
           }
         } 
         return p
-					
-      }),
-      updatedProposals
+      })
     }
   }
   case SUBMIT_TECHNICAL_REVIEWS_START: {

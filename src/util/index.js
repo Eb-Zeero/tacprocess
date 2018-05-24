@@ -312,10 +312,10 @@ export function areAllocatedTimesCorrect(partner, availableTime, proposals){
 
 }
 
-export function getLiaisonUsername(name, SALTAstronomers){
+export function getLiaisonUsername(name, astronomers){
   let username
-  (SALTAstronomers || []).forEach( sa => {
-    if (sa.name === name){ // eslint-disable-next-line
+  (astronomers || []).forEach( sa => {
+    if (sa.firstName === name){ // eslint-disable-next-line
       username = sa.username
     }
   })
@@ -451,3 +451,5 @@ export function downloadSummaries(proposals, semester, partner) {
     })
     .catch(err => console.error(err))
 }
+
+export const isAdministrator = (user) => (user.roles || [] ).some( role => role.type === types.ADMINISTRATOR)

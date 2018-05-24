@@ -2,6 +2,7 @@ import {
   SUBMIT_TECHNICAL_REVIEWS_FAIL,
   SUBMIT_TECHNICAL_REVIEWS_PASS,
   SUBMIT_TECHNICAL_REVIEWS_START,
+  UPDATE_TECHNICAL_REVIEWER,
   UPDATE_TECHNICAL_REVIEW,
 } from '../types'
 import { jsonClient } from '../api/'
@@ -10,22 +11,43 @@ import fetchProposals from './proposalsActions'
 import { makeTechComment } from '../util'
 
 /**
- * An action for updating the technical reviewer of a proposal in the local store.
+ * An action for updating the technical review of a proposal in the local store.
  *
  * @param proposalCode Proposal code, such as "2018-1-SCI-009".
  * @param semester Semester, such as "2018-1".
- * @param techReview Updated technical review.
+ * @param field either comment details, or feasible. it is a string
+ * @param newValue a new value to place on a filed.
  * @returns {{type, payload: {proposalCode: *, reviewer: *}}} The action.
  */
-export function updateTechnicalReview(proposalCode, semester, techReview) {
+export function updateTechnicalReview(proposalCode, semester, field, newValue) {
   return {
     type: UPDATE_TECHNICAL_REVIEW,
     payload: {
       proposalCode,
       semester,
-      techReview
+			field,
+      newValue
     }
   }
+}
+
+/**
+ * An action for updating the technical reviewer of a proposal in the local store.
+ *
+ * @param proposalCode Proposal code, such as "2018-1-SCI-009".
+ * @param semester Semester, such as "2018-1".
+ * @param reviewer a new value to place on a filed.
+ * @returns {{type, payload: {proposalCode: *, reviewer: *}}} The action.
+ */
+export function updateTechnicalReviewer(proposalCode, semester, reviewer) {
+	return {
+		type: UPDATE_TECHNICAL_REVIEWER,
+		payload: {
+			proposalCode,
+			semester,
+			reviewer
+		}
+	}
 }
 
 function startSubmittingTechnicalReviews() {

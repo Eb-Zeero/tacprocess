@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import Navigation from './components/Navigation'
 import * as actions from './actions/auth'
-import { defaultSemester } from './util'
+import {defaultSemester, getLiaisonUsername} from './util'
 import ApplicationPages from './components/pages/ApplicationPages'
 import setLiaisonAstronomer from './actions/proposalAction'
 import submitProposalsLiaison from './actions/liaison-astronomer-actions'
@@ -13,6 +13,8 @@ import { fetchAllData } from './actions/data-actions'
 import Loading from './components/messages/Loading'
 import FailToLoad from './components/messages/FailToLoad'
 import {ALL_PARTNER} from './types'
+import { updateTechnicalReview, updateTechnicalReviewer } from './actions/technicalReviewActions'
+import {reduceProposalsPerAstronomer} from "./util/filters"
 
 class App extends React.Component {
   componentDidMount() {
@@ -33,7 +35,21 @@ class App extends React.Component {
 	    submitProposalsLiaison(proposals, this.props.filters.selectedSemester, this.props.filters.selectedPartner)
 	  )
 	}
-
+	
+	technicalReviewChange = (proposalCode, field, event ) => {
+  	event.preventDefault()
+		console.log("HAHAHAHAHAHAH", this.props.user.username)
+		const semester = this.props.filters.selectedSemester
+		this.props.dispatch(updateTechnicalReview(proposalCode, semester, field, event.target.value))
+	};
+	technicalReviewerChange = (proposalCode, reviewer ) => {
+		const semester = this.props.filters.selectedSemester
+		this.props.dispatch(updateTechnicalReviewer(proposalCode, semester, reviewer))
+	};
+ 	requestSummary = (proposalCode) => proposalCode
+	submitTechnicalReviews = () => {
+ 		console.log('submiting')
+	}
 	loggingOut = () => {
 	  this.props.dispatch(actions.logout())
 	};
@@ -46,7 +62,12 @@ class App extends React.Component {
 	  } else if ( dataStatus.fetchingData) {
 	    return <Loading />
 	  }
-	  return (
+		const { submittingReviews, submittedReviews, loading }  = proposals
+		const saUser = filters.selectedLiaison === 'All' || filters.selectedLiaison === 'Not Assigned' || filters.selectedLiaison === 'Assigned' ? filters.selectedLiaison : getLiaisonUsername(filters.selectedLiaison, SALTAstronomers)
+		
+		const proposalsPerLiaison = reduceProposalsPerAstronomer(proposals.proposals || [], saUser, filters.selectedSemester)
+		
+		return (
   <BrowserRouter>
     <div className='root-main'>
       <div>
@@ -63,7 +84,8 @@ class App extends React.Component {
           {`The targets could not be loaded: ${ this.props.fetchTargetsError }`}
         </div>}
         <ApplicationPages
-	            proposals={ proposals.proposals }
+	            proposals={ proposals }
+							proposalsPerLiaison={ proposalsPerLiaison }
 	            isAuthenticated={ isAuthenticated }
 	            user={ user }
 	            initProposals={ initProposals }
@@ -71,6 +93,13 @@ class App extends React.Component {
 	            astronomers={ SALTAstronomers.SALTAstronomer }
 	            submitLiaisons={ this.submitLiaisons }
 	            setLiaison={ this.setLiaison }
+							technicalReviewChange={ this.technicalReviewChange }
+							technicalReviewerChange={ this.technicalReviewerChange }
+							submitTechnicalReviews={ this.submitTechnicalReviews }
+							requestSummary={ this.requestSummary }
+							submittingReviews={ submittingReviews }
+							submittedReviews={ submittedReviews }
+							loading={ loading }
 	          />
         <div className='footer'>
           <p>Copyright © 2018 TAC</p>

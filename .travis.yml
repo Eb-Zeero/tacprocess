@@ -1,4 +1,24 @@
-language: JAVASCRIPT
+sudo: false
+language: node_js
+
+# cache node_models to speed up build
+cache:
+  directories:
+    - node_modules
+node_js:
+  - 8
+branches:
+  only:
+  - master
+  - development
+
+recipients:
+  - sifiso@saao.ac.za
+  - hettlage@saao.ac.za
+  - nhlavutelo@saao.ac.za
+
+    on_success: always
+    on_failure: never
 # command to install dependencies
 install: "yarn install"
 

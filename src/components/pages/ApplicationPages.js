@@ -17,13 +17,21 @@ import { ADMIN_PAGE, STATISTICS_PAGE, TAC_PAGE, TECHNICAL_PAGE } from '../../typ
 
 const ApplicationPages = ({
   proposals,
+  proposalsPerLiaison,
   initProposals,
   filters,
   user,
   isAuthenticated,
   astronomers,
   setLiaison,
-  submitLiaisons
+  submitLiaisons,
+	technicalReviewChange,
+	technicalReviewerChange,
+	requestSummary,
+	submitTechnicalReviews,
+	loading,
+	submittingReviews,
+	submittedReviews,
 }) => {
   const userRoles = user.roles
   return (
@@ -45,13 +53,28 @@ const ApplicationPages = ({
       />
       {
         canViewPage(userRoles, TECHNICAL_PAGE) &&
-        <UserRoute exact isAuthenticated={ isAuthenticated } path='/techreview' component={ TechReviewPage } />
+        <UserRoute exact isAuthenticated={ isAuthenticated } path='/techreview'
+          component={ () => <TechReviewPage
+            proposals={ proposalsPerLiaison }
+            user={ user }
+            astronomers={ astronomers }
+            filters={ filters }
+						technicalReviewChange={ technicalReviewChange }
+						technicalReviewerChange={ technicalReviewerChange }
+						requestSummary={ requestSummary }
+						submitTechnicalReviews={ submitTechnicalReviews }
+						submittingReviews={ submittingReviews }
+						submittedReviews={ submittedReviews }
+						loading={ loading }
+          />
+          }
+        />
       }
       {
         canViewPage(userRoles, TECHNICAL_PAGE) &&
         <UserRoute exact isAuthenticated={ isAuthenticated } path='/liaison'
           component={ () => <LiaisonPage
-            proposals={ proposals }
+            proposals={ proposals.proposals }
             astronomers={ astronomers }
             initProposals={ initProposals }
             user={ user }
@@ -70,14 +93,22 @@ const ApplicationPages = ({
   )}
 
 ApplicationPages.propTypes = {
-  proposals: propTypes.array,
+  proposals: propTypes.object,
+	proposalsPerLiaison: propTypes.array,
   isAuthenticated: propTypes.bool,
   user: propTypes.object,
   initProposals: propTypes.array,
   filters: propTypes.object,
   astronomers: propTypes.array,
   setLiaison: propTypes.func,
-  submitLiaisons: propTypes.func
+  submitLiaisons: propTypes.func,
+	technicalReviewChange: propTypes.func,
+	technicalReviewerChange: propTypes.func,
+	requestSummary: propTypes.func,
+	submitTechnicalReviews: propTypes.func,
+	submittingReviews: propTypes.bool,
+	submittedReviews: propTypes.bool,
+	loading: propTypes.bool,
 }
 
 export default ApplicationPages

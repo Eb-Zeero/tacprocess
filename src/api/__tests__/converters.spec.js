@@ -41,7 +41,6 @@ describe('test is tac comment is created with in proposal correctly', () => {
 		expect(tacComments()).toBe(true)
 	})
 	it('should not produce any results if partner is not provided', () => {
-		console.log(tacComments(">>", [{comment: "this is a comment"}]))
 		expect(tacComments([{comment: "this is a comment"}])).toEqual({p: "p"})
 		expect(tacComments([{comment: "this is a comment", partner:{code: null}}])).toEqual({})
 		expect(tacComments([{comment: "this is a comment", partner:{code: undefined}}])).toEqual({})

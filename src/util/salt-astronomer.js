@@ -7,27 +7,27 @@
 export const getSaltAstronomerName = (username, SALTAstronomers) => {
   if ( !username ) return null
   const name = (SALTAstronomers || []).find(a =>  a.username === username )
-  return name ? name.name : null
+  return name ? name.firstName : null
 }
 
 /**
- * It get a salt astronomer username from the list of astronomers that match salt astronomer name or none
- * @params name
+ * It get a salt astronomer username from the list of astronomers that match salt astronomer firstName or none
+ * @params firstName
  * @params SALTAstronomers
- * @return name
+ * @return firstName
  * */
-export const getSaltAstronomerUsername = (name, SALTAstronomers) => {
-  if ( !name ) return null
-  const username = (SALTAstronomers || []).find(a =>  a.name === name )
+export const getSaltAstronomerUsername = (firstName, SALTAstronomers) => {
+  if ( !firstName ) return null
+  const username = (SALTAstronomers || []).find(a =>  a.firstName === firstName )
   return username ? username.username : null
 }
 
 /**
- * method used for sorting Salt Astronomers by name
+ * method used for sorting Salt Astronomers by firstName
  * */
 export const compareByFirstName = (a, b) => {
-  const name1 = a.name.toUpperCase()
-  const name2 = b.name.toUpperCase()
+  const name1 = a.firstName.toUpperCase()
+  const name2 = b.firstName.toUpperCase()
   if (name1 < name2) {
     return -1
   }
@@ -38,20 +38,18 @@ export const compareByFirstName = (a, b) => {
 }
 
 /**
- * this method checks if the proposal with given proposal code has a liaison astronomer form given proposals
+ * This method checks if the proposal has a liaison astronomer
  *
- * @param proposalCode
- * @param proposals
+ * @param proposal
  * @return boolean
 * */
-export const hasLiaison = (proposalCode, proposals) => {
-  const proposal = (proposals||[]).filter(
-    ip => ip.proposalCode === proposalCode)
-  if (proposal.length > 0){
-    if (proposal[ 0 ].liaisonAstronomer === '') {
+export const hasLiaison = (proposal) => {
+
+  if (proposal.initialState){
+    if (!proposal.initialState.liaisonAstronomer || proposal.initialState.liaisonAstronomer === '') {
       return false
     }
-    return !!proposal[ 0 ].liaisonAstronomer
+    return !!proposal.liaisonAstronomer
   }
   return false
 }
